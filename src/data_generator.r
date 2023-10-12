@@ -1,6 +1,6 @@
 ## generating data for a linear mixed model
 
-data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relevant = 0.2, rho = 0.5, Sigma = ){
+data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relevant = 0.2, rho = 0.5, Sigma = NULL){
 
 
     # p: number of covariates
@@ -34,7 +34,7 @@ data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relev
     if (q>0) Z <- X[,1:q]
 
     # Sigma = positive definite covariance matrix for random effects
-    Sigma = diag(q+1)
+    if(is.null(Sigma)) Sigma <- diag(q+1)
     # bi = realizations of random effects
     bi = MASS::mvrnorm(n_subjects, rep(0,q+1), Sigma)
 
