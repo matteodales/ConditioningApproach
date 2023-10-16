@@ -13,7 +13,7 @@ selFun_fixed_lambda <- function(X, subjects, y, fixed_form, rand_form, lambda){
 
 ## function to select the model by choosing the optimal lambda through BIC
 
-selFun_adapting_lambda <- function(X, subjects, y, fixed_form, rand_form, lambda.max.min.ratio = 0.01, n_lambdas = 50, plotting=FALSE){
+selFun_adapting_lambda <- function(X, subjects, y, fixed_form, rand_form, lambda.max.min.ratio = 0.01, n_lambdas = 50, plotting=FALSE, add_lambda = FALSE){
   
   dat <- data.frame(X, subjects, y)
   lambda_max <- max(abs(t(X) %*% y))
@@ -36,6 +36,10 @@ selFun_adapting_lambda <- function(X, subjects, y, fixed_form, rand_form, lambda
   if(plotting) plot(lambdas,BIC_vec)
 
   opt<-which.min(BIC_vec)
+
+  if(add_lambda) chosen_lambdas_vec <<- append(chosen_lambdas_vec,lambdas[opt])
+
+  print(lambdas[opt])
 
   glm1_final <- glmmLasso(fix = fixed_form, rnd = list(subjects =~ 1), data=dat,
                           , lambda=lambdas[opt],switch.NR=FALSE,final.re=FALSE)
