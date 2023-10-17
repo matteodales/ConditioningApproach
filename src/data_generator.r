@@ -17,6 +17,7 @@ data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relev
 
     covMat <- bdiag(list(comp_cor(n_observations, rho))[rep(1,n_subjects)])
     X <- t(mvrnorm(p, rep(0, n), covMat))
+    colnames(X) <- paste("X", 1:p, sep="")
 
     beta_0 = 1
 
@@ -71,6 +72,7 @@ data_generator_random_time <- function(n_subjects, n_observations, p, SNR = 2, p
 
     covMat <- bdiag(list(ar1_cor(n_observations, rho))[rep(1,n_subjects)])
     X <- t(mvrnorm(p, rep(0, n), covMat))
+    colnames(X) <- paste("X", 1:p, sep="")
 
     beta_0 = 1
 
@@ -82,6 +84,7 @@ data_generator_random_time <- function(n_subjects, n_observations, p, SNR = 2, p
 
     # the random variables are the intercept and dummies identifying the time (numbered observation)
     Z <- list.rbind(list(rbind(rep(0,n_observations-1),diag(n_observations-1)))[rep(1,n_subjects)])
+    colnames(Z) <- paste("t", 1:q, sep="")
     X <- cbind(Z,X)
 
     etaFix <- beta_0 + X%*%beta #fixed component of the model
