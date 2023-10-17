@@ -9,6 +9,32 @@ library(glmnet)
 library(MASS)
 library(nlme)
 
+# function that returns the boolean vector of selected variables after selective inference
+# using Benjamini Hockberg procedure
+
+selection_with_selinf <- function(res, sel_without_selinf, fdr_level = 0.1){
+
+    # sel_vec is the boolean vector of selected variables after lasso
+
+    sel <- c(rep(0,length(sel_without_selinf)))
+    names(sel) <- names(sel_without_selinf)
+    only_sel <- names(sel_without_selinf[sel_without_selinf == 1])
+
+    p_vals <- c(rep(0, length(res$selinf)))
+
+    for(i in 1:length(res$selinf)){
+        p_vals[i] <- res$selinf[[i]]['pval']
+    }
+
+    adj_p_vals <- p.adjust(p_vals, method='BH')
+    
+    for(i in 1:length(res$selinf)){
+        if(adj_p_vals[i]<fdr_level) sel[only_sel[i]] <- 1
+        }
+
+    return(sel)
+}
+
 
 # from rugamer, generates estimated cov mat
 vcov_RI <- function(mod, sigma = getME(mod, "sigma"), tau = getME(mod, "theta"),
