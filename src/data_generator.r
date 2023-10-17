@@ -81,7 +81,7 @@ data_generator_random_time <- function(n_subjects, n_observations, p, SNR = 2, p
     beta = c(sample (possible_coefs, size=n_rel+q, replace=T), rep(0, p-n_rel))
 
     # the random variables are the intercept and dummies identifying the time (numbered observation)
-    Z <- list.rbind(list(rbind(diag(n_observations-1),rep(0,n_observations-1)))[rep(1,n_subjects)])
+    Z <- list.rbind(list(rbind(rep(0,n_observations-1),diag(n_observations-1)))[rep(1,n_subjects)])
     X <- cbind(Z,X)
 
     etaFix <- beta_0 + X%*%beta #fixed component of the model
