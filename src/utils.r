@@ -8,6 +8,7 @@ library(base)
 library(glmnet)
 library(MASS)
 library(nlme)
+library(lmmlasso)
 
 # function that returns the boolean vector of selected variables after selective inference
 # using Benjamini Hockberg procedure
