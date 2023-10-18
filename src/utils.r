@@ -10,6 +10,29 @@ library(MASS)
 library(nlme)
 library(lmmlasso)
 
+
+# returns the average length of confidence intervals in the results of selective inference
+
+ci_length <- function(res){
+
+  len <- length(res$selinf)
+  not_na <- 0
+  avg <- 0
+
+  for(i in 1:len){
+    ciu <- as.numeric(res$selinf[[i]]['ciu'])
+    if(is.na(ciu)) next
+    cil <- as.numeric(res$selinf[[i]]['cil'])
+    if(is.na(cil)) next
+    not_na <- not_na + 1
+    avg <- avg + (ciu - cil)
+  }
+
+  if(not_na>0) return(avg/not_na)
+  else return(NA)
+  
+}
+
 # function that returns the boolean vector of selected variables after selective inference
 # using Benjamini Hockberg procedure
 
