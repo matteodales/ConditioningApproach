@@ -11,6 +11,15 @@ selFun_fixed_lambda <- function(X, subjects, y, fixed_form, rand_form, lambda){
     
     }
 
+
+selFun_fixed_lambda_randtime <- function(X, Z, subjects, y, lambda){
+    
+        lasso_res <- lmmlasso(cbind(rep(1,n),X),y,cbind(rep(1,n),Z),subjects,lambda=lambda,nonpen = c(1:4))
+
+        return(list(names = names(lasso_res$coefficients)[lasso_res$coefficients!=0], vec = lasso_res$coefficients!=0))
+    
+    }
+
 ## function to select the model by choosing the optimal lambda through BIC
 
 selFun_adapting_lambda <- function(X, subjects, y, fixed_form, rand_form, lambda.max.min.ratio = 0.01, n_lambdas = 50, plotting=FALSE, add_lambda = FALSE){
