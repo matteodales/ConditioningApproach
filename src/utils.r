@@ -1,7 +1,7 @@
 library(tidyverse)
 library(gamm4)
 library(lmerTest)
-library(selfmade)
+#library(selfmade)
 library(pracma)
 library(glmmLasso)
 library(base)
@@ -9,6 +9,11 @@ library(glmnet)
 library(MASS)
 library(nlme)
 library(lmmlasso)
+
+setwd("C:/Users/matteda/OneDrive - Universitetet i Oslo/Skrivebord/phd/ConditioningApproach/selfmade/")
+files.sources = list.files()
+invisible(sapply(files.sources, source))
+setwd("C:/Users/matteda/OneDrive - Universitetet i Oslo/Skrivebord/phd/ConditioningApproach/src/")
 
 
 # returns the average length of confidence intervals in the results of selective inference

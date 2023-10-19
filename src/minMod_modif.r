@@ -2,19 +2,6 @@
 # now we assume the variables that have a random effect, to be always included in the model (and excluded from penalization)
 # these variables are also used in the reduced model that computes the estimate of variance
 
-minMod <- function(mod)
-{
-  
-  lhs <- formula(mod)[[2]]
-  reFormula <- cnms2formula(mod@cnms)
-
-  #modIC <-
-  update(mod, formula. = reformulate(c("1", reFormula), lhs))
-  # return(list(sigma = getME(modIC, "sigma"),
-  #             tau = getME(modIC, "theta"))
-  # )
-  
-}
 
 # copied from cAIC4 package
 cnms2formula <-
@@ -51,3 +38,18 @@ cnms2formula <-
     
     return(reFormula)
   }
+
+
+minMod <- function(mod)
+{
+  lhs <- formula(mod)[[2]]
+  reFormula <- cnms2formula(mod@cnms)
+
+  #modIC <-
+  update(mod, formula. = reformulate(c("1", reFormula), lhs))
+  # return(list(sigma = getME(modIC, "sigma"),
+  #             tau = getME(modIC, "theta"))
+  # )
+  
+}
+
