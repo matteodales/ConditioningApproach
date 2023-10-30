@@ -3,6 +3,19 @@
 # these variables are also used in the reduced model that computes the estimate of variance
 
 
+vcov_RI <- function(mod, sigma = getME(mod, "sigma"), tau = getME(mod, "theta"),
+                    sigmaT = NULL, tauT = NULL)
+{
+  
+  if(!is.null(sigmaT)) sigma <- sigmaT
+  if(!is.null(tauT)) tau <- tauT
+  n <- NROW(mod@resp$y)
+  nrsubj <- nlevels(mod@flist[[1]])
+  getME(final_model,'Z')%*%(sigma(final_model)^2*getME(final_model,'Lambda')%*%getME(final_model,'Lambdat'))%*%t(getME(final_model,'Z'))+ diag(sigma(final_model)^2,n)
+  
+}
+
+
 # copied from cAIC4 package
 cnms2formula <-
   function(cnms) {
