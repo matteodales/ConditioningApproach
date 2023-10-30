@@ -15,8 +15,8 @@ data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relev
     n <- n_subjects*n_observations
     subjects = as.factor(gl(n_subjects,n_observations))
 
-    covMat <- bdiag(list(comp_cor(n_observations, rho))[rep(1,n_subjects)])
-    X <- t(mvrnorm(p, rep(0, n), covMat))
+    #covMat <- bdiag(list(comp_cor(n_observations, rho))[rep(1,n_subjects)])
+    X <- t(mvrnorm(p, rep(0, n), diag(n)))
     colnames(X) <- paste("X", 1:p, sep="")
 
     beta_0 = 1
@@ -45,7 +45,7 @@ data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relev
 
     y = etaFix + rowSums(bi[subjects,]*cbind(rep(1,n),Z)) + e
 
-    return(list(X = X, Z=Z, subjects = subjects, y = y, beta=beta, sd=sd, covMat=covMat))
+    return(list(X = X, Z=cbind(rep(1,n),Z), subjects = subjects, y = y, beta=beta, sd=sd))
 
 }
 

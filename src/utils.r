@@ -55,10 +55,10 @@ selection_with_selinf <- function(res, sel_without_selinf, fdr_level = 0.1){
         p_vals[i] <- res$selinf[[i]]['pval']
     }
 
-    adj_p_vals <- p.adjust(p_vals, method='BH')
+    #p_vals <- p.adjust(p_vals, method='BH')
     
     for(i in 1:length(res$selinf)){
-        if(adj_p_vals[i]<fdr_level) sel[only_sel[i]] <- 1
+        if(p_vals[i]<fdr_level) sel[only_sel[i]] <- 1
         }
 
     return(sel)
