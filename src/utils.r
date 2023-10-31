@@ -8,7 +8,6 @@ library(base)
 library(glmnet)
 library(MASS)
 library(nlme)
-library(lmmlasso)
 
 setwd("C:/Users/matteda/OneDrive - Universitetet i Oslo/Skrivebord/phd/ConditioningApproach/selfmade/")
 files.sources = list.files()
@@ -64,21 +63,6 @@ selection_with_selinf <- function(res, sel_without_selinf, fdr_level = 0.1){
     return(sel)
 }
 
-
-# from rugamer, generates estimated cov mat
-vcov_RI <- function(mod, sigma = getME(mod, "sigma"), tau = getME(mod, "theta"),
-                    sigmaT = NULL, tauT = NULL)
-{
-  
-  if(!is.null(sigmaT)) sigma <- sigmaT
-  if(!is.null(tauT)) tau <- tauT
-  n <- NROW(mod@resp$y)
-  nrsubj <- nlevels(mod@flist[[1]])
-  bdiag(list(diag(n/nrsubj)*sigma^2 + tau^2)[rep(1,nrsubj)])
-  
-}
-
-
 # copied from cAIC4 package
 cnms2formula <-
   function(cnms) {
@@ -112,3 +96,36 @@ cnms2formula <-
     
     return(reFormula)
   }
+
+## generating the compound simmetry covariance matrix
+
+comp_cor <- function(n,rho){
+    mat <- matrix(rho,n,n)
+    diag(mat) <- rep(1,n)
+    return(mat)
+}
+
+## generating the autocorrelation covariance matrix
+
+ar1_cor <- function(n, rho) {
+exponent <- abs(matrix(1:n - 1, nrow = n, ncol = n, byrow = TRUE) - 
+    (1:n - 1))
+rho^exponent
+}
+
+# adapting the functions in selfmade package
+# now we assume the variables that have a random effect, to be always included in the model (and excluded from penalization)
+# these variables are also used in the reduced model that computes the estimate of variance
+
+
+vcov_RI <- function(mod, sigma = getME(mod, "sigma"), tau = getME(mod, "theta"),
+                    sigmaT = NULL, tauT = NULL)
+{
+  
+  if(!is.null(sigmaT)) sigma <- sigmaT
+  if(!is.null(tauT)) tau <- tauT
+  n <- NROW(mod@resp$y)
+  nrsubj <- nlevels(mod@flist[[1]])
+  getME(mod,'Z')%*%(sigma(mod)^2*getME(mod,'Lambda')%*%getME(mod,'Lambdat'))%*%t(getME(mod,'Z'))+ diag(sigma(mod)^2,n)
+  
+}

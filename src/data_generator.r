@@ -1,4 +1,4 @@
-library('rlist')
+#library('rlist')
 
 ## generating data for a linear mixed model
 
@@ -15,8 +15,8 @@ data_generator <- function(n_subjects, n_observations, p, q, SNR = 2, prop_relev
     n <- n_subjects*n_observations
     subjects = as.factor(gl(n_subjects,n_observations))
 
-    #covMat <- bdiag(list(comp_cor(n_observations, rho))[rep(1,n_subjects)])
-    X <- t(mvrnorm(p, rep(0, n), diag(n)))
+    covMat <- bdiag(list(comp_cor(n_observations, rho))[rep(1,n_subjects)])
+    X <- t(mvrnorm(p, rep(0, n), covMat))
     colnames(X) <- paste("X", 1:p, sep="")
 
     beta_0 = 1

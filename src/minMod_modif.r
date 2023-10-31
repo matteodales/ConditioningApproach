@@ -11,7 +11,7 @@ vcov_RI <- function(mod, sigma = getME(mod, "sigma"), tau = getME(mod, "theta"),
   if(!is.null(tauT)) tau <- tauT
   n <- NROW(mod@resp$y)
   nrsubj <- nlevels(mod@flist[[1]])
-  getME(final_model,'Z')%*%(sigma(final_model)^2*getME(final_model,'Lambda')%*%getME(final_model,'Lambdat'))%*%t(getME(final_model,'Z'))+ diag(sigma(final_model)^2,n)
+  getME(mod,'Z')%*%(sigma(mod)^2*getME(mod,'Lambda')%*%getME(mod,'Lambdat'))%*%t(getME(mod,'Z'))+ diag(sigma(mod)^2,n)
   
 }
 
